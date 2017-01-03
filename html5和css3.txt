@@ -1,0 +1,606 @@
+Emmet:  http://docs.emmet.io/abbreviations/syntax/
+caniuse.com	
+	这个网站可以查询哪些属性是否能使用
+http://cubic-bezier.com/#.44,-0.5,.97,1.11
+	贝塞尔曲线网址
+http://www.qt86.com/		在线生成艺术字，国内网站，直接生成指定字
+http://www.dafont.com/		生成自定义字体，国外网站，可以下载字体压缩包
+https://www.fontsquirrel.com/tools/webfont-generator	生成具有兼容性的自定义字体文件，国外网站，
+http://blog.csdn.net/xx1710/article/details/51725012    激活webstorm11网址
+
+1.伪元素和元素的区别
+	1伪元素可以被元素替换
+	2.伪元素不能被选中（除了IE8中first-line）
+	3.伪元素无法通过JS的DOM获取
+2.nth-child(an+b)
+    a: a各一组，
+        正数：从上到下，或者从左到右（如果浮动）
+        负数：从下到上，或者从右到左（如果浮动）
+    b:表示从第几个元素开始分组
+      正数：
+      负数：使用虚拟元素代替
+3.  :target  目标伪类 (重点)
+    1、配合 a 元素使用
+    2、可以控制不同层级的元素
+4    :checked (掌握)
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;//清除表单中小方框的默认样式
+      扩展：
+        浏览器   内核      厂商前缀
+        Chrome  blink    -webkit-
+        Firefox gecko    -moz-
+        IE      trident  -ms-
+5.过渡（transition）
+		属性：
+			 transition-property: width;	指定过渡的属性
+			  transition-duration: 4s;		指定过渡的时间（周期）
+			  transition-delay: 1s;			指定过渡的延迟时间
+			  transition-timing-function: ease;指定过渡的速度（先慢后匀速最后最慢）
+												常用linear,表示匀速
+		transition:放在过渡的起始位置，它会产生来 去两个动画效果
+				   放在过渡的结束位置，它只会产生来一个动画效果
+		1、触发过渡的方式：伪类（hover...），JS(onmouseon...)
+		2、过渡：具有过渡效果的CSS属性，该CSS属性的值是数值
+		3、过渡结束：
+			维持过渡结束状态：
+				a. 在起始状态（样式）设置持续时间，或者延迟无限大。
+				b. JS动态添加“结束状态（样式）”
+					利用监听器监听过渡结束事件
+					 addEventListner("transitionend",function(event){
+						box1.classList.add（box1.end）;		
+					 },false)
+classList--------------->新的DOM属性，classList
+								add() -- 直接写选择器的名称即可（不需要.）
+								toggle() -- 如果选择器存在，删除该选择器，否则，添加该选择器。
+		4、延迟时间
+			负值：过渡持续时间 - 延迟时间，剩下的过渡时间。
+		5、过渡结束事件：
+				transitionend
+		6、过渡效果覆盖
+			，后面的过渡效果会覆盖前面的过渡效果。
+		7.贝塞尔曲线
+                1.控制过渡的速度
+                2.控制过渡的回弹效果
+6.变换（transform）
+    倾斜 skew()
+        函数参数实角度（deg）,默认逆时针。
+		
+    缩放 scale()
+        正数，放大，
+        小数，缩小，
+		
+    位移 translate() / 		translateX() translateY();沿X,Y轴方向移动。
+	
+	设置中心点：transform-origin:可以设置两个参数，用来设置x,y坐标轴
+    重点：
+        1、元素必须是非 inline 元素
+        2、所有的变换都有中心点（transform-origin）
+              中心点的正值区间在右下方
+              % --- 基于元素的宽度 和 高度
+              关键字： top right ....
+        3、所有的变换，不会影响相邻兄弟元素的位置。
+        4、如果有多个变换（变形）函数，执行顺序，从左-右。
+	旋转rotate(50deg)	默认顺时针
+    中心点： 变换的基准点， 0 0 点在元素的左上角。
+
+	3D
+	transform-style: preserve-3d;	设置在父元素上，让该元素的子元素呈现3D效果
+    景深perserve：
+        如果景深越大，元素与实际大小越接近。
+        如果景深越小，元素越小（translateZ( 负值 )）。
+
+    3D中心点
+        不能使用%设置Z轴的中心点。
+
+
+7、表单
+	表单新属性
+		autocomplete
+        记录用户的输入信息，默认是 	on 记录
+									off　不记录用户信息
+		required="required"
+        用户必须输入信息，否则无法提交。
+		autofocus="autofocus"
+        自动获取输入焦点
+		pattern="[0-9]{6}“
+		 属性值是正则表达式，通过正则表达式校验输入的合法性。
+    自定义验证信息：
+        1、获取Input 的DOM
+        2、监听 oninput 事件，实时获取用户输入的文本信息
+        3、在 该DOM上，调用 setCustomValidity(msg)
+        4、如果用户输入的符合要求 需要设置 setCustomValidity(‘’)
+
+
+    表单作用域
+        1、给表单定义一个ID。
+        2、所有的表单元素的 form 属性 指向该ID即可。
+
+
+    暂存
+       意义；实现一个表单内容对应不同的后台服务。
+       formaction --- 服务器地址，处理输入信息。
+       formanovalidity --- 不校验输入信息的合法性。
+8、animation(动画)（了解）
+					/*其值时关键帧的名字*/	
+            animation-name: animDemo;
+					/*动画播放的时间*/				
+            animation-duration: 2s;		
+					/*控制动画每帧的播放方向*/
+            animation-direction: reverse;
+					/*控制动画的播放次数
+						数值： 整数
+						关键字： infinite ---  无限次的播放动画
+					*/
+            animation-iteration-count: infinite;
+					 知识点：animation-direction
+							animation-iteration-count
+							搭配使用，实现不同的播放效果*/
+					/*填充模式：动画播放结束后，停留在哪一帧
+						 forwards : 播放结束后，停留在最后一帧。*/
+            animation-fill-mode: forwards;
+					  /*控制动画的播放状态
+							paused 暂停播放动画
+					*/
+            animation-play-state: paused;
+			/*关键帧*/
+			@keyframes animDemo {
+            /*动画的第一帧*/
+            from{} == 0%{}
+            from{  }
+            10%{ }
+            50%{  }
+            /*动画的最后一帧*/
+            to{
+            }
+9、文本处理（掌握）
+    处理对象：长文本：拉丁文，链接
+    word-break: break-all(节省空间，没有单词边界)
+	word-wrap: break-word;/*单词间会出现换行符，会有单词边界*/
+
+            
+    中文
+        white-space: nowrap 不换行（当遇到<br>才换行）
+					 pre保留元素内容的换行符，tab符，空格	页面效果同<pre>元素
+    文本溢出
+        text-overflow: ellipsis (显示省略号)
+        英文：需要配合 overflow: hidden;
+        中文：需要配合 overflow: hidden;  white-space: nowrap;
+
+    文本的阴影：
+        text-shadow:可以设置多个阴影，用,分割
+            1 x轴偏移量
+            2 y轴偏移量
+            3 模糊半径 -- 在阴影基础上 向外扩展指定像素
+            4 阴影的颜色		
+10、自定义字体（了解时）
+	见最顶部网址
+
+11、边框处理
+    border-image-slice: 切割图片（上，右，下，左） 数字，
+                         没有单位（默认就是像素） -- （了解）
+	/*默认拉伸*/
+            border-image-repeat: stretch;
+            border-image-repeat: repeat;
+            border-image-repeat: round;
+
+	注意：图片边框生效的条件 必须给元素制定边框大小
+    border-radius:  圆角 （必须掌握）
+12、盒子的阴影（box-shadow） -- 掌握
+    六个参数
+        参数一：是否是内阴影（inset） --- 通常不写该参数（ 外阴影 ）
+        参数二、参数三：阴影相对于元素左上角的阴影偏移坐标
+        参数四: 模糊半径 - 在阴影基础上向外扩散指定的像素
+        参数五：扩展半径 -
+               正数 -- 增加指定像素的阴影
+               负数 -- 减少指定像素的阴影
+        参数六：阴影的颜色
+
+13、外轮廓(outline)  ---- 掌握
+    类似border,但是它不会随着设置该属性的图形变化而变化
+	只会在它原来的大小设置边框，
+	
+	
+		而border会根据自身变化而变化
+		 outline-offset可以设置outline的扩散方向
+		 正数：向外
+		 负数：向内
+    outline-offset: 设置外轮廓的偏移量
+        正数：向外
+        负数：向内
+
+14、resize   ---- 了解
+    必须配合 overflow: auto;使用
+        both: 水平，垂直方向
+        horizontal: 水平
+        vertical: 垂直
+15、渐变：CSS3新增的函数，本质是让浏览器生成一张图片，所以设置的时候是background-image ---- 掌握
+    线性渐变（重复）
+        linear-gradient(方向， 颜色， 颜色过渡的起始位置)
+		repeating-linear-gradient:表示重复渐变
+                当起始位置和终点位置设置为一个颜色时，它就不会变色
+    径向渐变（重复）
+        radial-gradient(形状，半径，圆心，颜色， 颜色过渡的起始位置)
+		默认圆心在元素的中间，用at 来设置圆心
+               形状的值为 circle定为圆形，后面紧跟的数值为圆心的半径
+							ellipse定为椭圆
+
+16、背景图 ---- 掌握
+        背景图中心点（background-origin）:
+        border-box
+        padding-box(默认值)
+        content-box
+
+        背景图裁剪（background-clip）:
+        border-box(默认值)
+        padding-box
+        content-box
+
+        文本的裁剪（非W3C标准）
+         -webkit-background-clip: text;
+         -webkit-text-fill-color: transparent;
+
+        背景的大小（background-size）
+            cover: 覆盖整个元素的背景,会根据元素的宽高显示最大值
+            contain: 保持背景图的大小，会根据元素的宽高显示最大值
+                    如果元素的宽度>高度，背景图的高度 = 元素的高度
+17.伸缩盒模型
+		在设置伸缩盒模型的时候，一定要在伸缩容器中设置宽高时设置百分比或者不设置，
+		不设置就默认宽度是100%，
+	17.1为什么要引用伸缩盒模型
+		传统布局的问题
+			1.父元素高度会塌陷
+			2.需要计算高度
+			3.设置边框和内边距会影响布局
+        解决办法
+			1.：box-sizeing:border-box;
+			2.需要用到calc()函数，来动态的设置宽度
+				在用该函数时，必须在calc中的运算符左右留一个空格
+    17.2 伸缩容器：写有display: flex (inline-flex)
+		 伸缩项目：就是伸缩容器的子元素
+
+    17.3.1当伸缩容器设置  --- （掌握）
+        flex-wrap: nowrap (默认值)
+        flex-direction: row (默认值)
+
+
+    水平对齐伸缩项目
+
+                justify-content:
+                            flex-start  左对齐
+                            flex-end    右对齐
+                            center       居中
+
+                            注意：当水平方向存在剩余空间
+                            space-around    --- 空隙环绕伸缩项目
+                            space-between   --- 空隙在伸缩项目中间
+
+
+    垂直对齐伸缩项目
+
+          align-items:
+                            stretch （默认值） --- 保持与父元素等高
+                            flex-start  顶部对齐
+                            flex-end    底部对齐
+                            center      中间对齐
+                            baseline    伸缩项目基线最大的为基准对齐
+
+
+    17.3.2、当伸缩容器设置 ----- （了解）
+
+        flex-wrap: wrap  ---- 当水平空间不足，伸缩项目换行显示。 （firefox）
+        flex-direction: row (默认值)
+
+
+        align-content:
+
+                            flex-start  顶部对齐
+                            flex-end    底部对齐
+                            center      中间对齐
+
+
+     伸缩项目
+
+     2.1  垂直方向的对齐   -- （掌握）
+
+        align-self:
+                            flex-start  顶部对齐
+                            flex-end    底部对齐
+                            center      中间对齐
+
+
+     2.2 排序          -- -- （掌握）
+        order: 整数
+
+              不影响默认排序
+
+     2.3 剩余空间分配    -- （掌握）
+        flex-grow: 整数
+            剩余空间分配
+
+     2.4 压缩率         -- -- （掌握）
+        flex-shrink: 默认是1 当设置为0 不压缩
+
+     2.5 元素初始宽度   -- （掌握）
+        flex-basis: 200px (=  width： 200px)
+
+        配合 flex-shrink: 计算实际的压缩大小。
+	17.4说明具体属性应该设置在具体位置
+		17.4.1适用于父元素的伸缩盒模型样式
+			display:flex;
+			flex-direction(设置伸缩盒模型下的子元素在父容器的排列位置，是   水平还是垂直    )
+			flex-wrap(设置伸缩盒模型下的子元素超出父容器时是否   换行  )
+			flex-flow(复合样式，就是flex-direction和flex-wrap的结合)
+			justify-content(设置伸缩盒模型下的子元素的       水平对齐方式    )
+			alien-items(设置伸缩盒模型下的子元素的			 垂直对齐方式    )
+			alien-content(当flex-wrap:wrap;时，超出父容器的子元素会显示多行，当在多行显示时，该属性可以设置垂直方向下的对齐)
+		17.4.2使用父容器下的子元素的伸缩盒模型样式
+			order(用整数值来定义排列顺序，当设置数值为正数时，会显示最右边，然后依次往左排。数值小的排在前面，可以为负值。)
+			flex-grow(设置子元素在父容器的       扩展     比例)
+			flex-shrink(设置子元素在父容器的     压缩     比例)
+			flex-basis(设置子元素的     伸缩基准值     ，当不设置时就是子元素本身的宽高，设置以后也是相当于元素本身的宽高)
+			flex(复合样式，相当于flex-grow || flex-shrink  ||   flex-basis)
+			align-self(设置子元素自身相对与父元素的       垂直对齐方式        )
+18、多列布局（了解）
+	column-width: 200px;	指定列宽  -- 浏览器根据水平宽度自动计算显示几列	(常用这个，一般不指定列数)
+	column-count:5	显示指定的列数
+	column-rule: 5px solid red;		分割线的样式
+	column-gap: 50px;		间隙的距离
+	column-span: all;		横跨所有列
+	column-fill: auto ;	按照元素的高度填充			column-fill: balance ;默认值：均匀分布每一列
+19.响应式布局
+	19.1@media 多媒体选择器
+
+    19.1.1 检测设备屏幕尺寸（宽度） ---- （掌握）
+		设备屏幕小于768px
+		@media screen and (max-width: 768px){ 选择器 }
+
+		需要添加meta ，确保视口和设备屏幕宽度一致
+		<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+
+		设备屏幕 768px ~ 1024px
+		@media screen and (min-width: 768px ) and (max-width: 1024px){}
+
+		样式覆盖（重点）可以用important提升样式优先级
+
+
+    19.1.2 检测手机的方向
+
+		  横屏，
+		  @media screen and (orientation: landscape){ 选择器 }
+
+		  默认竖屏	portrait
+
+    19.1.3 打印设备
+		  @media print { 选择器 }
+			CSS的新函数		attr(属性名) 获取元素指定的属性值
+
+	19.2新单位 rem ---- （掌握）
+			r = root = <html> 基于Html元素字体大小。
+
+	19.3项目实战  ---- （掌握）
+
+		图片问题
+			1. 当父元素没有设置高度，图片的底边与父元素底边有缝隙
+			解决办法：vertical-align: middle
+			2. 两个图片相邻时，图片之间出现缝隙。
+			解决办法：在html代码中注释掉换行符
+
+		外边距问题
+			如果设置外边距，且水平空间不足，会导致出现滚动条。
+
+		rem使用问题：
+			可以给html字体大小设置 100px,方便换算。
+20使块元素在其父元素能够垂直居中可以使用3种方式
+            1.使该元素浮动，设置相应的margin或者定位
+            2.声明该元素为display:table-cell(单元格元素)，行为和td一样,并且设置vertical-align: middle;，然后定位
+            3.用伸缩盒模型display:flex;,设置alien-items:center;
+21.为什么不使用table布局
+        1、语义化
+            table 是做数据呈现。
+        2、性能问题
+            改变任何一个td都会导致整个table 重绘 和 重排(reflow)
+21.Bootstrap
+				xs:x small  手机端，超小屏幕
+                sm:small    pad端，小屏幕
+                md:middle   中屏幕
+                lg:large    大屏幕
+
+                hidden-lg/md/sm/xs,在指定的宽度隐藏元素
+                visible-lg/md/sm/xs,在指定的宽度显示元素
+
+            列偏移
+                col-xs-offset-num,向右偏移指定的num值，该属性会影响它相邻的元素位置
+                col-xs-push-num,向右偏移指定的num值，该属性不会影响它相邻的元素位置，
+                                如果与右侧列重叠，则右侧列会覆盖该列
+                col-xs-pull-num,向左偏移指定的num值，该属性不会影响它响铃的元素位置，
+                                如果与左侧列重叠，则该列会覆盖左侧列
+            列不等高问题
+                    当存在多行列，并且其中一列的高度高出相邻列时，其他低的列会被挤走，用clearfix可以解决高度塌陷问题
+                    塌陷解决之后，出现列不等高问题，这时为父元素设置
+                        display:flex;
+                        flex-wrap:wrap;
+                        可以解决列不等高问题
+            想要设置多于12列，可以在其中的一列中嵌套两列
+			
+			
+			详细的说明请见bootstrap官方中文文档
+22.文件加载
+	22.1加载单一文件
+		<input type="file">
+		<script type="text/javascript">
+			window.onload=function(){
+				//获取Input
+				var filedom=document.querySelector("[type=file]");
+				//获取选中图片列表
+				filedom.onchange=function(event){
+					//event.target.files中存放着被选中的文件地址
+					var filelist=event.target.files;
+					//创建文件读取对象
+					var filereader=new FileReader;
+					//filereader.readAsDataURL这个属性可以读取被选中的图片列表
+					//这一步是开始读取文件
+					filereader.readerAsDataURL(filelist[0])
+					//当文件读取结束后
+					filereader.onload=function(){
+						var img =document.createElement(”img“);
+						img.src=filereader.result;
+						document.body.appendChild(img);
+					};
+				};
+			};
+			</script>
+	22.2加载多个文件
+		//当读取多个文件时要加上multiple属性
+		<input type="file" multiple="multiple">
+		<script type="text/javascript">
+			window.onload=function(){
+				var filedom=document.querySelector("[type=file]");
+				filedom.onchange=function(event){
+					var filelist=event.target.files;
+					//遍历获取到的所有文件列表
+					for(var i=0;i<filelist.length;i++){
+						readimg(filelist[i]);
+					}
+				};
+				function readimg(fileobj){
+					var filereader=new FileReader;
+					filereader.readAsDataURL(fileobj);
+					filereader.onload=function(){
+						var img=document.createElement("img");
+						img.src=filereader.result;
+						document.body.appendChild(img);
+					};
+				}
+			};
+		</script>
+	22.3判断文件类型是否为指定类型
+		运用indexof属性可以查看这个文件中的类型是否是image,
+		当它的值为-1时，则证明filelist.type的字符串中没有image,说明不是图片格式
+		if(filelist.type.indexOf("image")=-1){
+			alert("非图片文件")
+		}
+	22.4读取文本文件
+		就是将读取图片文件的文件读取对象的方法由readAsDataURL换成readAsText
+	22.5文件单个拖拽
+		要被拖拽的元素必须设置draggable="true";
+		js部分
+		//box1为拖拽对象
+		var box1=document.querySelector(".box1");
+		//box2为释放区域
+		var box2=document.querySelector(".box2");
+		box2.ondragover=function(ev){
+			ev.preventDefult();
+		};
+		box2.ondrop=function(){
+			box2.appendChild(box1.cloneChild(true));
+		};
+	22.6多个文件拖拽
+		JS部分
+		定义一个全局变量
+		var dragdoms
+		//获取box1
+		var box1=document.querySelector(".box1");
+		//box2为释放区域
+		var box2=document.querySelector(".box2");
+		//运用事件的委派为拖拽元素的父元素绑定拖拽事件
+		document.body.ondragstart=function(ev){
+			dragdoms=ev.target;
+		}box2.ondragover=function(ev){
+			ev.preventDefault();
+		};
+		box2.ondrop=function(){
+			box2.appendChild(dragdoms.cloneNode(true));
+		};
+	22.7从外部拖拽文件到网页中
+		  window.onload=function(){
+        //获取释放元素
+        var box1=document.querySelector(".box1");
+        //在ondropover事件中去除禁止符号
+        box1.ondragover=function(ev){
+            ev.preventDefault();
+        }
+        //ondrop为放下元素事件
+        box1.ondrop=function(ev){
+            //取消浏览默认把外部图片加载的默认行为
+            ev.preventDefault();
+           //外部文件存放在ev.dataTransfer.files中
+            var filelist=ev.dataTransfer.files;
+            //创建文件读取对象
+            var filereader=new FileReader();
+            //该对象的readASDateURL属性可以读取文件，开始读取文件
+            filereader.readAsDataURL(filelist[0]);
+            //读取文件结束后，创建一个图片，将图片放在释放区域中
+            filereader.onload=function(ev){
+              var img =document.createElement("img");
+                img.src=filereader.result;
+                box1.appendChild(img);
+            };
+        }
+    };
+23.canvas
+		设置画笔
+		var painting=canvas.getContext("2d");
+		设置填充色
+		painting.fillStyle="red";
+		设置描边色
+		painting.strokeStyle="blue"
+		设置画笔粗细
+		painting.lineWidth=1;
+		画矩形
+		painting.fillrect(x轴坐标，y轴坐标，矩形宽度，矩形高度)；
+		
+		//在源图像外显示目标图像。只有源图像外的目标图像部分会被显示，源图像是透明的。
+		//注意1：该属性一定位于目标图像 和 源图像之间。
+		painting.globalCompositeOperation = "destination-out";
+24.手机触屏技术
+	当手指触摸屏幕时touchstart
+		ev.target.touches  -- 数组，表示手指的个数，坐标。里面封装了手指的x,y轴坐标
+	当手指在屏幕上移动时touchmove
+		ev.target.touches  -- 数组，表示手指的个数，坐标。
+	当手指在屏幕上离开时touchend
+		处理逻辑
+25、离线存储
+	/*新建，修改sesstionStorage*/
+    /*key  value*/
+    sessionStorage.setItem("name","value1");
+    sessionStorage.setItem("name","value");
+    /*删除一个sesstionStorage*/
+    /*sessionStorage.removeIhtem("name");*/
+    /*查询（获取）value值*/
+    sessionStorage.getItem("name");
+    /*获取key值,
+    * 注意：这里的key和数组很像，但是不是数组，叫数据词典
+    *   key后面跟（），不是[]
+    * */
+    document.title=sessionStorage.key(0)
+	
+    sessionStorage
+        会话：浏览器页签的打开到关闭
+        数据共享：只能在页签内（session内）使用
+        生命周期：浏览器页签的打开到关闭
+
+    localStorage
+        数据共享：同源（协议+域名+端口）
+        生命周期：永久,直到用户手动删除
+
+    存储的数据格式: 只能是数字和字符串，不能存储对象，要想存储对象，只能存json对象
+
+    如何存储json对象
+        1、把json对象转换成字符串  JSON.stringify()
+        2、讲字符串转换成json     JSON.parse()
+
+    应用场景：
+        1、频繁访问。
+        2、对安全性没有要求
+
+26、多媒体元素	
+			见ppt
+	
+
+	
+	
+		
+		

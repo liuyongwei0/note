@@ -1,0 +1,972 @@
+一、网络基础知识
+1.web页呈现的过程
+	-客户端（Client）发送请求（ulr）通过网络到服务器
+	-服务器(Server)运算后，生成文件，将文件通过网络，返回给客户端
+	-客户端解析文件呈现出页面
+2.通信
+	-在一条通信线路上必定有一端是客户端，另一端是服务器端
+3.请求报文的一般格式
+	-请求方法 请求URL 协议版本
+	-请求首部字段
+	-内容实体
+4.响应报文的一般格式
+	-协议版本 状态码 状态码短语
+	-响应首部字段
+	-内容实体（HTML页面）
+5.请求方法
+	-GET 获取资源    		没有实体内容
+	-POST 传输实体主体		有实体内容
+	-PUT 传输文件
+	-HEAD 获得报文首部
+	-DELETE 删除文件
+6.URL（统一资源定位符）
+	主要内容
+		协议方案名 服务器地址 端口号 文件路径？ 查询字符串# 片段标识符
+		文件路径之间用/隔开，查询字符串用&隔开
+7.状态码
+	1xx 信息性状态码
+	2xx 成功状态码			200		成功
+	3xx 重定状态码			304  	未改变，不返回主体内容（利用缓存）
+	4xx 客户端错误状态码	404		没有找到
+	5xx 服务器错误状态码	500		服务器内部错误
+8.DNS
+	-作用:解决IP地址和域名之间的映射
+9.端口号
+	-物理端口
+	-逻辑端口：端口范围从0到65535，网页默认端口是80
+	端口号的划分	
+		-0到1023		熟知端口号	是固定分配	80是网页的默认端口
+		-1024到49151	注册端口号
+		-49152到65535	临时端口号
+10.套接字（Socket）
+	-socket=IP+Port
+	-套接字=IP地址+端口号
+	-一个socket的背后是一个服务
+11.网络访问过程：
+		1.浏览器输入地址
+		2.根据ip地址找到对应 服务器
+		3.建立TCP连接（修路）
+		4.浏览器 http 把数据传输给服务器
+		5.服务器接到数据进行解析，计算出对应的结果
+		6.服务器 http 把数据返回给浏览器
+		7.浏览器 解析数据，绘制出结果
+		8.断开TCP连接
+
+12.IP协议：
+		1.每台上网的机器都有IP地址
+		2.TCP协议根据IP结果，建立连接
+		3.HTTP 传输具体的数据
+
+13	http协议与网络基础
+		- 网络访问过程
+			- url
+				- 协议名：协议的版本号
+				- 域名/ip地址
+				- 端口号
+				- 文件路径
+				- 查询字符串
+			- IP
+				- 寻址
+			- TCP
+				- 建立连接
+			- 请求报文
+				- 请求头
+					- 第一行
+						- 请求方法
+						- url
+						- 版本号
+					- 请求首部字段
+						- 查表
+				- 请求体
+					- 空
+					- 非空
+			- 响应报文
+				- 响应头
+					- 第一行
+						- 版本号
+						- 状态码
+						- 状态码说明字段
+					- 响应首部字段
+						- 查表
+				- 响应体
+					- 具体内容
+			- TCP
+				- 断开连接	
+二、git语句
+	-git配置语句
+		$ git config --global user.name your name
+		$ git config --global user.email email@example.com
+	-查看git配置效果
+		$ git config --global --list
+	-创建版本库
+		$ mkdir code
+			创建了一个名字为code的文件夹
+		$ cd code
+			进入code目录中
+		$ pwd
+			显示当前目录
+			确保整个路径没有中文
+	-初始化git目录
+		$ git init
+			此时创建了一个git目录
+	加入文件
+		$ git add index.html
+			在缓存区中加入了一个名为index.html的文件
+		$ git commit -m “说明这次提交的意义”
+	检出
+		$ git checkout --index.html
+			找出名字为index.html的文件
+	查看代码状况
+		$ git status
+	查看代码被修改的内容
+		$ git diff index.html
+	查看历史提交记录
+		$ git log
+	回退版本
+		$ git reset --hard HEAD^
+			其中需要回退几次版本就在HEAD右上角输入几次^
+	去指定版本
+		$ git reset --hard 版本ID号
+	关闭git窗口后查看历史版本的ID号
+		$ git reflog
+2.1   git的工作原理
+	工作区	git文件不算工作区
+	版本库
+			版本库分为暂存区(stage)和分支(master)
+	我们在加入文件使需要两个步骤，
+		第一步是用git add把文件添加进了暂存区
+		第二步是用git commit -m 把文件提交到了当前的分支
+	删除暂存区的文件
+		$ rm index.html
+	在这一层可以恢复文件
+		$ git checkout -- index.html
+	彻底删除文件，包括分支里面的文件
+		$ git rm index.html
+		$ git commit -m index.html
+		
+				
+三、nodejs
+0.nodejs web 服务器基础知识
+	- 服务器的建立与关闭
+		- createServer
+		- close
+	- 获取用户输入的数据
+		- req
+			- req.method
+			- req.url
+				- 路由
+					- 路由：根据用户的 url 中的文件路径确定的请求资源，给出对应处理过程
+					- if... else if...
+					- switch
+1.http模块
+	var http = require("http");
+	var server = http.createServer(function (req, res) {
+		res.end("finished");
+	});
+	server.listen(3000, function (){
+		console.log("server started");
+	})
+2.url模块
+		
+		var url = require('url');
+		var urlSrting = req.url;	//指网页上的url		url 字符串
+		var urlObj = url.parse(urlString, true); //将querystring 解析为对象
+		var pathName = urlObj.pathname;	//文件路径
+		var query = obj.query;			//查询字符串,分为两个部分,就是表单中的 name值= value值
+		var name = query.name;
+		var value = query.value;							
+					进行路由设计
+3.设置响应头
+				- res
+					- 设置响应头
+						- 整体一次性设置
+							- res.writeHead()
+						- 一条一条设置
+							- setHeader， getHeader, removeHeader, statudCode
+					- 填充响应体
+						- res.write
+						- res.end
+4.form 表单
+		- 属性
+			- action 指向服务器路径
+				-  绝对路径
+					- http://127.0.0.1:3000/update
+						- http: 开头
+				-  相对路径
+					- /update		
+			- method 两种 
+				- get
+				- post
+			- 表单元素
+				- input
+					- id 区分元素 -- js，css
+					- name	语义：名
+					- value	语义：值
+5.get和post的区别与联系
+	- 联系：提交数据
+	- 区别：  
+		1. 数据存在位置不同		
+			- get：url 的  查询字符串：name1=value&name2=value
+			- post： 请求体中
+		2. 访问次数
+			- get： 1 次请求 
+			- post： 2 次请求 请求头 请求体
+		3. 是否可被浏览器缓存
+			- get：可以被缓存
+			- post：不能被缓存
+		4. 安全性(相对安全性)
+			- get：相对不安全一些
+			- post：相对安全
+6.Buffer（非重点）
+		- nodejs 特有的类, 操作二进制内存	
+		- 作用  
+			- 读写内存
+			- 从文件(或者网络)中读入数据
+
+7.文件读取模块fs -- file system
+	var fs = require('fs');
+	- 常用API
+		- 读
+			-异步读取
+			- fs.readFile(filename, callback(err,data));
+				- 文件路径	文件夹的路径 + 文件名和后缀
+					- 绝对路径
+					- 相对路径	
+				- callback（err， data）
+					- 执行时机
+						- 文件读完的时候， 事件被触发， 回调函数被执行
+					- err
+						- err 被赋值 一个 对象
+						- err null
+					- data
+						- 数据类型：buffer
+							- 文字：buffer.toString();
+							- 图片：
+			- 同步读取
+			- fs.readFileSync(filename);
+				- 文件路径
+				- 怎么得到读取回来的结果： 返回值
+		- 写
+			-异步写入
+			- fs.writeFile(file, data, callback);
+				- 参数一：文件路径
+				- 参数二：写入的内容
+				- 参数三：callback
+					- err
+			-同步写入
+			- fs.writeFileSync(file, data[, options]);				
+				- 参数一：文件路径
+				- 参数二：写入的内容
+				- 参数三：options： {flag : 'a'} 	//追加
+		- 错误处理 ： 同步的方式，依靠 try catch
+			- try{  }
+			- catch(err){ err; }
+		- 同步与异步的概念（难点）
+			- 区别
+	
+ 8.设置小图标favicon.ico
+	- 使用 路由分发
+	- 使用 读文件
+	- 返回 数据
+	
+	下面是一个完整的路由设计
+	var http = require('http');
+	var url = require('url');
+	var fs = require('fs');
+
+	http.createServer(function (req, res) {
+
+		var urlStr = req.url;
+		console.log(urlStr);
+
+		var pathName = url.parse(urlStr, true).pathname;
+		var filePath = './favicon.ico';
+		var formPath = './form.html';
+
+		//路由
+		switch (pathName){
+			case '/':
+				res.end('index.html');
+				break;
+			case '/add':
+				res.end('add.html');
+				break;
+			case '/fav':
+				fs.readFile(filePath, function (err, data) {
+					if(err){
+						console.error(err);
+						res.end('error');
+					}else {
+						// console.log(data);
+						res.end(data); // string buffer
+					}
+				});
+				break;
+			//加载表单页面
+			case '/form':
+				fs.readFile(formPath, function (err, data) {
+					if(err){
+						console.error(err);
+						res.end('error');
+					}else {
+						// console.log(data);
+						res.end(data); // string buffer
+					}
+				});
+				break;
+			default:
+				res.end('404 not found');
+		}
+	}).listen(3001, function () {
+		console.log('server setup');
+	});
+四、mongodb
+9.1 NoSql
+- 含义：not only sql
+- nosql 的新一代数据库（sql是操作传统数据库的语言）
+- 传统数据（也就是关系型数据库）存储的都是用一张又一张二维表的形式存储数据
+- NoSql 数据库存储数据摆脱了传统数据库表的限制
+- NoSql 数据库的优势：
+	- 高并发
+	- 高访问效率
+	- 分布式
+- NoSql 数据库适合处理大数据
+
+9.2 mongodb 简介
+- 适用场景：
+	- 网站数据：MongoDB非常适合实时的插入、更新与查询
+	- 大尺寸，低价值的数据	
+	- 高伸缩性的场景：MongoDB 非常适合由数十或数百台服务器组成的数据库
+	- 用于对象及JSON数据的存储
+- 不适合场景：
+	- 高度事务性的系统：例如银行或会计系统
+		- 事务：把一系列操作打成包视作一个整体。这些操作要么都做要都不做，如果中间某些操作失败了，那么所有已经完成的操作都回滚
+	- 必须使用 sql 语言的场景
+
+9.3 mongodb 运行思想
+- 系统设计思想：服务器-客户端形式
+	![mongdb系统基本思想](mongdb系统基本思想.jpg)
+	1. 服务器。mongodb 系统运行起来的第一步是启动服务器。mongodb 服务器是实际对输入数据进行运算处理的地方。在运算处理之后，mongodb 服务器真正的进行磁盘读写。用户提交的数据最后是被存储在磁盘上的。只有服务器正常运行，mongodb 系统才算可用。
+		- 启动服务器的命令：mongod 命令
+			- mongod 命令 有一个参数 --dbpath 是必须填写的，这个参数指定了mongodb服务将要读写磁盘的具体位置
+					mongod -dbpath "E:\Program Files\MongoDB 2.6 Standard\storage\db"
+					mongod -dbpath "请替换为你自己机器的读写磁盘的位置"
+	2. 客户端。程序员只能操作客户端完成数据的存取操。客户端并没有对数据的读写能力，客户端只能通过把程序员输入的操作发送到服务器。服务器才真正进行运算和读写磁盘，服务器将运算的结果发送给客户端，客户端再显示给程序员。
+		- 客户端有多种形式
+			- 命令行：启动客户端的命令：mongo 命令.没有参数，启动后程序员可以向客户端输入命令
+					mongo
+			- 可视化工具：可是化工具有很多，很多厂商都生产可视化工具
+				- mongoVUE 等
+	3. 加入数据。数据库在最开始的时候是空的，里面除了系统自身需要使用的数据外，并没有对程序员有价值的。我们需要通过各种手段将数据放入到数据库中使得里面具有数据。
+		- 命令行插入数据： db.collection.insert();
+		- 可视化工具插入数据
+		- 导入数据的命令
+			![导入数据](./mongdb系统导入数据.jpg)
+				mongoimport --db emp --collection employees --drop --file employees_bak.json
+				//请确保文件路径正确
+- 环境变量配置的注意事项：
+	1. 环境变量中配置的文件夹路径是你想要运行的 exe 文件所在的目录
+	2. windows bug：在确保正确配置了环境变量之后，请将所有的文件夹窗口和cmd窗口全部关闭。之后程序可以正常运行
+
+9.4 mongodb数据的组织结构
+- 三层存储结构： DB ---- collection ---- document
+	每一个 DB 下面可以有很多个 collection， 每一个 collection 下面可以有很多个 document。每个 document 可以存在内嵌文档
+- 数据存储结构示意
+	- 数据库   *第一层 数据是 DB （数据库）*
+		- 集合    *第二层 collection （集合）*
+			- 文档    *第三层 document （文档）*
+			- 文档
+			- 文档
+		- 集合
+			- 文档
+		- 集合
+	- 数据库 
+		- 集合
+			- 文档
+		- 集合
+- **文档**
+	- 文档就是 Bson ---- json 的升级版
+	- 每一个文档**必须**包含一个 _id 属性
+		- 程序员自己添加这个属性
+			- 程序员自己必须保证这个属性值唯一
+		- 系统添加这个属性
+			- 系统使用 ObjectId('XXX') 保证 _id 属性唯一
+				- 12个字节存储
+					- 时间：4个字节 *时间戳在开始的字节，而且时间是可排序的*
+					- 机器：3个字节
+					- 进程：2个字节
+					- 计数：3个字节
+				- ObjectId 是可排序的
+
+9.5 mongodb 常用命令  
+**当命令行客户端成功连接服务器后，可以通过向客户端输入命令来控制数据库系统**
+- 数据库级别的常用命令
+	- 显示所有数据库的名字
+			show dbs
+	- 切换数据库，只有切换到正确的数据库后，才能正常操作数据
+			use dbName
+	- 查看当前数据库的名字
+			db.getName()
+- 集合级别的常用命令
+	- 查看当前数据库下的所有集合
+			show collections
+	- 创建集合
+			db.createCollection(“collName”);
+
+9.6 文档操作
+- 增删改查； CRUD
+- **增**
+	- 语法
+		db.collectionName.insert( Object ); //Object 表示待插入的对象
+	- 代码
+			db.jobs.insert({job_id:'GG', job_title:'web', min_salary:10000, max_salary:20000})
+- **删**
+	- 语法
+		db.collectionName.remove( Query, {justOne:true} ); //Query 表示查询条件
+	- 代码			
+			db.collection.remove({ job_id: “GG" }, {justOne:true})
+- **改**
+	- 语法
+		db.collection.update(Query, UpdateObject, {upsert:false, multi:false} )
+		db.collection.update(Query, UpdateObject, 1, true ) // 非0 ===》 1
+		// //Query 表示查询条件, UpdateObject 具体的插入操作
+		// **注意 {$set:{name: value}}**
+	- 代码
+			db.jobs.update({job_id:'GG'},{$set:{job_title:'web1'}})
+- **查**
+	- 语法
+		db.collection.find(Query, Projections)	//Query 表示查询条件 Projections 表示投影（列的显示情况）
+		- 投影：只显示我们关心的列：{_id:0, name:1} //0表示不显示，1表示显示
+		- 查询条件：
+			- 掌握:
+				- 比较运算
+					- 大于，小于，大于等于，小于等于，不等于
+				- 逻辑运算
+					- 与，或
+				- 内嵌文档
+					- 等值匹配
+			- 了解:
+				- 逻辑运算
+					- 非，或非，
+					- 存在判断
+				- 数组
+					- 全部匹配
+					- 数组大小
+				- 函数
+				- 正则
+				- 内嵌文档
+					- 精确匹配
+	- 代码
+			db.jobs.find({job_id:'GG', min_salary:{$gt:4}})
+			db.jobs.find({job_id:'GG', $or:[{min_salary:{$lte:2}}, {min_salary:{$gte:4}}]})
+
+9.8 游标
+db.collection.find() 的返回值是一个游标
+- 游标三大函数 ： sort ，skip， limit
+	- sort 排序
+		- 对结果集进行排序 {min_salary: orderNumber }
+			- 升序：orderNumber 大于0，表示升序
+			- 降序：orderNumber 小于0，表示降序
+		- 多列排序 {min_salary:1, max_salary:-1} 
+			- 先对 min_salary 升序排列。然后，对那些 min_salary 值相等的文档，在按照 max_salary 降序排列
+	- skip 跳过若干个
+		- 从结果集当中去掉前若干个
+	- limit 只取前若干个
+		- 从结果集当中值取得前若干个
+- 链式调用
+		db.jobs.find({},{_id:0,min_salary:1,max_salary:-1}).sort({min_salary:1, max_salary:-1}).skip(3).limit(3)
+- 分页
+	- 首先确定
+		1. 一页显示多少条数据：假设一页显示 10 条数据
+		2. 确定页数是从0还是1页开始计数： 假设第一个页面的页的编号是 0 
+	1. 先用，sort 排序，使得结果集有序
+	2. 然后，用 skip 跳过一定量的数据，计算方法：页号 * 每页显示的量
+		- 假设当前页的编号为 0 ：那么，skip 跳过的数量就是 0 * 10
+		- 假设当前页的编号为 1 ：那么，skip 跳过的数量就是 1 * 10
+	3. 最后，用 limit 取得当前页应该显示的数据量
+	
+	
+	
+五、mongoose
+## 简介
+- Mongoose 是MongoDB的一个对象模型工具，是 nodejs 操作 MongoDB 的第三方框架，可以在异步的环境下执行。
+- 同时它也是针对MongoDB操作的一个对象模型库，封装了MongoDB对文档的的一些增删改查等常用方法，让NodeJS操作Mongodb数据库变得更加灵活简单。
+
+		- 参考资料
+			- 文档： www.mongoosejs.com
+			- mongoose 的 API 是我见过的最好的文档，没有之一 
+				- 虽然只有英文版，但是，光看例子也能够理解基本含义
+
+##安装引用
+- 安装mongoose：
+		npm install mongoose
+- 引用mongoose：
+		var mongoose = require("mongoose");
+- 使用"mongoose"连接数据库：
+		var db = mongoose.connect("mongodb://user:pass@localhost:port/database");
+
+## Mongoose 最重要（最难）的三个概念
+1. Schema : 模式，规范
+2. Model ： 模型，函数
+3. Entity ： 实体，实例，对象
+
+三者之间的关系
+![三者关系示意图](./mongoose 设计思路示意图.jpg)
+
+
+### Schema 简述
+- 含义： Schema —— 一种以文件形式存储的数据库模型骨架，可以说是数据属性模型【传统意义的表结构】，又或着是“集合”的模型骨架。 Schema 无法直接连接数据库端，也就是说它不具备对数据库的操作能力，仅仅只是数据模型在程序片段中的一种表现。说白了就是规定了一种数据存储格式
+- 代码定义		
+		var mongoose = require("mongoose");
+		var MonsterSchema = new mongoose.Schema({
+		    name : { type:String },	//属性name,类型为String
+		    age  : { type:Number, default:0 },	//属性age,类型为Number,默认为0
+		    time : { type:Date, default:Date.now },
+		    email: { type:String,default:''}
+		});
+		//基本属性类型有：字符串、日期型、数值型、布尔型(Boolean)、null、数组、内嵌文档等。
+
+### Model 简述
+- 含义： Model —— 由Schema构造生成的模型，它具有了Schema定义的数据库骨架（数据格式数据模型）。此外，更重要的是还具有数据库操作的行为，类似于管理数据库属性、行为的类。
+- 创建一个 Model 模型，我们需要指定：
+	1. 集合名称
+	2. 集合的 Schema 结构对象
+- 代码
+		//通过Schema来创建Model呢，如下示例：		
+		var db = mongoose.connect("mongodb://127.0.0.1:27017/test");
+		// 创建Model
+		var MonsterModel = db.model("Monster", MonsterSchema);
+		// MonsterModel：数据库中的集合名称,当我们对其添加数据时如果 MonsterModel 已经存在，则会保存到其目录下，如果未存在，则会创建 MonsterModel 集合，然后在保存数据。
+
+拥有了Model，我们也就拥有了操作数据库的法宝，在后面的课程中，我们就会学习使用Model来进行增删改查的具体操作
+如果需要对某个集合有所作为，那就交给 Model 模型来处理。
+
+### Entity 简述
+- 含义 Entity —— 由 Model 创建的实体，Entity 指代某一条具体的文档，model 指代某个表（collection）。 Model 和 Entity 都能操作数据库，但 Model 比 Entity 具有更大的操作空间
+- 代码
+		// 使用Model创建Entity
+		var monsterEntity = new MonsterModel({	
+		       name : "niuMoWang",
+		       age  : 2000,
+		       email: "niuMoWang@atguigu.com"
+		});
+		//说白了，就是 new 了一个对象
+		console.log(niuMoWang.name); 
+		console.log(niuMoWang.age); 
+		//创建成功之后，Schema 属性就变成了 Model 和 Entity 的公共属性了
+
+##**增删改查**
+###增
+- Model 保存方法
+	- 方法：Model.create(文档数据, callback))
+	- 代码：
+			MonsterModel.create({ name:"路人甲", age:2}, function(error, doc){
+			    if(error) {
+			        console.log(error);
+			    } else {
+			        console.log(doc);
+			    }
+			});
+- Entity 保存方法
+	- 方法：Entity.save(文档数据, callback))
+	- 代码：
+			var entity = new MonsterModel({ name:"路人甲", age:2});
+			entity.save(function(error,doc) {
+			    if(error) {
+			        console.log(error);
+			    } else {
+			        console.log(doc);
+			    }
+			});
+
+###删
+- Model 删除方法
+	- 方法：model.remove(查询条件,callback);
+	- 代码：
+			var conditions = { name: '路人甲' };
+			MonsterModel.remove(conditions, function(error){
+			    if(error) {
+			        console.log(error);
+			    } else {
+			        console.log('Delete success!');
+			    }
+			});
+- Entity 删除方法
+	- 方法：obj.remove(callback);
+	- 代码：
+			entity.remove(function(err, doc){
+				if(err){
+					console.error(err);
+				} else {
+					console.log(doc);
+				}
+			});
+###改
+- Model 更新方法
+	- 方法：obj.update(查询条件, 更新对象, callback);
+	- 代码：
+			ar conditions = {name : '路人甲'};		
+			var update = {$set : { age : 3 }};		
+			MonsterModel.update(conditions, update, function(error){
+			    if(error) {
+			        console.log(error);
+			    } else {
+			        console.log('Update success!');
+			    }
+			});
+- Entity 更新方法
+	- 方法：obj.save(callback);
+	- 代码：
+			entity.age = 3;
+			entity.save(function(err, doc){
+				if(err){
+					console.error(err);
+				} else {
+					console.log(doc);
+				}
+			});
+
+###查
+- **find查询**【最重要】
+	- 方法： obj.find(查询条件, 过滤条件, callback);
+	- 代码：
+			MonsterModel.find({},function(error,docs){
+			   //若没有向find传递参数，默认的是显示所有文档
+			});		
+			MonsterModel.find({ "age": 3 }, {_id:0}, function (error, docs) {
+			  if(error){
+			    console.log("error :" + error);
+			  }else{
+			    console.log(docs); //docs: age为28的所有文档
+			  }
+			}); 
+	- 备注：
+		- 查询条件有很多种，上面这段代码，代换不同的查询条件有不一样的效果
+		- 过滤条件控制那些属性最终会包含在结果集当中，如果过滤条件省略或为Null，则返回所有属性。
+- 单条数据查询
+	- 方法： findOne(Conditions,callback);
+	- 代码：
+			MonsterModel.findOne({ age: 3}, function (err, doc){
+			   // 查询符合age等于27的第一条数据
+			   // doc是查询结果
+			});
+			// findOne方法，只返回第一个符合条件的文档数据。
+	- 方法：findById(_id, callback);
+	- 代码：
+			MonsterModel.findById('obj._id', function (err, doc){
+			 //doc 查询结果文档
+			});   
+
+####查询条件
+"$lt"(小于)，"$lte"(小于等于),"$gt"(大于)，"$gte"(大于等于)，"$ne"(不等于)，"$in"(可单值和多个值的匹配)，"$or"(查询多个键值的任意给定值)，"$exists"(表示是否存在的意思)。
+- 大于、小于、不等于
+		MonsterModel.find({"age":{"$gt":18}},function(error,docs){
+		   //查询所有nage大于18的数据
+		});		
+		MonsterModel.find({"age":{"$lt":60}},function(error,docs){
+		   //查询所有nage小于60的数据
+		});		
+		MonsterModel.find({"age":{"$gt":18,"$lt":60}},function(error,docs){
+		   //查询所有nage大于18小于60的数据
+		});
+		MonsterModel.find({ age:{ $ne:24}},function(error,docs){
+		    //查询age不等于24的所有数据
+		});		
+		MonsterModel.find({name:{$ne:"路人甲"},age:{$gte:3}},function(error,docs){
+		  //查询name不等于tom、age>=18的所有数据
+		});
+
+- 包含
+		MonsterModel.find({ age:{ $in: 2}},function(error,docs){
+		   //查询age等于20的所有数据
+		});		
+		MonsterModel.find({ age:{$in:[2,3]}},function(error,docs){
+		  //可以把多个值组织成一个数组
+		}); 
+
+- 逻辑或	
+		MonsterModel.find({"$or":[{"name":"yellowBrow"},{"age":500}]},function(error,docs){
+		  //查询name为yaya或age为28的全部文档
+		});
+
+- 属性是否存在
+		MonsterModel.find({name: {$exists: true}},function(error,docs){
+		  //查询所有存在name属性的文档
+		});
+		MonsterModel.find({telephone: {$exists: false}},function(error,docs){
+		  //查询所有不存在telephone属性的文档
+		});
+
+##游标
+数据库使用游标返回 find 的执行结果。
+客户端对游标的实现通常能够对最终结果进行有效的控制。可以限制结果的数量，略过部分结果，根据任意键按任意顺序的组合对结果进行各种排序。
+最常用的查询选项就是限制返回结果的数量(limit函数)、忽略一点数量的结果(skip函数)以及排序(sort函数)。所有这些选项一点要在查询被发送到服务器之前指定。
+###游标的三大函数
+ sort函数 --------  skip函数  --------  limit函数
+1. ** sort 函数  **
+	- 介绍：sort函数可以将查询结果数据进行排序操作，该函数的参数是一个或多个键/值对，键代表要排序的键名，值代表排序的方向，1是升序，-1是降序。
+	- 方法：find(Conditions,fields,options,callback);
+	- 代码：
+			Model.find({},null,{sort:{age:-1}},function(err,docs){
+		  		//查询所有数据，并按照age降序顺序返回数据docs
+			});
+
+2. **  skip 函数  **
+	- 介绍：跳过指定数量的匹配结果，返回余下的查询结果。
+	- 方法：find(Conditions,fields,options,callback);
+	- 代码;
+			Model.find({},null,{skip:4},function(err,docs){
+	    		console.log(docs);
+			});
+			// 如果查询结果数量中少于4个的话，则不会返回任何结果。
+
+3. ** limit 函数 **
+	- 介绍：在查询操作中，有时数据量会很大，这时我们就需要对返回结果的数量进行限制，那么我们就可以使用limit函数，通过它来限制结果数量。
+	- 方法：find(Conditions,fields,options,callback);
+	- 代码：
+			Model.find({},null,{limit:20},function(err,docs){
+    			console.log(docs);	
+			});
+			// 如果匹配的结果不到20个，则返回匹配数量的结果，也就是说limit函数指定的是上限而非下限。
+
+六、express
+express的设计网页的思路
+	1：设计路由，将你要设计的路由写在routes这个文件夹下，路由文件模板见2
+	2：将路由文件引入到app中。先将自己写路由文件引到app文件中：var router = require(./routes/router.js);
+		然后用app.use("/", router);将自己写的路由在所有的请求下都在router中进行路由判断
+		（当出现不同类别的路由判断时，建议进行路由分流，如在routes下建立对应的shuihurouter，和xiyoujirouter，然后相继引入）
+	3.当在路由到模板网页需要引入ejs模板时，在view文件夹下创立模板，将需要替换改动的地方用<%= code %>：显示替换过 HTML 特殊字符的内容。
+		在实际的路由中将需要替换的东西写在路由的回调函数中function(req, res, next){	res.render('index', { name:'wukong', content: '新闻具体报道'});}
+		其中对象中就是需要替换的内容
+
+1. app.use 和app.get(all)的区别
+app.use()是引用中间件，比如自己写的路由，例如app.use("/shuihu", shuihurouter);
+	shuihurouter是自己写的路由文件，在使用的时候需要先引入var shuihurouter = require(”路由文件的路径“)；
+app.get()是设置路由，就是在自己写的路由中直接设置路由用的。
+
+2.路由文件模板	
+	- 路由模块化
+	- 原因
+		- 代码管理维护方便
+		- 团队合作
+		- 可移植性与可扩展性
+	var express = require("express");
+	var router = express.Router;
+
+		router.use(function (req, res, next) {
+			console.log("水浒转");
+			next();
+		});
+		
+		router.get("/wuyong", function (req, res, next) {
+		console.log("wuyong");
+		res.end("吴用");
+		});
+	
+	`moudule.exports = myModule;`
+3. ejs
+- 模板引擎就是把数据整合到 html 文件中
+	- ejs 的模板形式： HTML = 模板 + 数据
+	- ejs 语法：
+		- `<% code %>：JavaScript 代码。	`
+		- `<%= code %>：显示替换过 HTML 特殊字符的内容。`
+		- `<%- code %>：显示原始 HTML 内容。`
+		- `<%- include('header') -%>`
+
+- 在 express 中使用 ejs
+	- 安装 ejs 
+		- npm install ejs -save
+			- 其中： -save 就是把在 package.json 中的依赖列表中写入 ejs 
+	- 使用 ejs
+		- 设置
+			- `app.set('views', path.join(__dirname, 'views'));`
+			- `app.set('view engine', 'ejs');`
+	- 生成页面
+		- `res.render('index', { name:'wukong', content: '新闻具体报道');
+	
+4. 静态资源服务	(public)
+- 静态资源包括
+	- 图片
+	- css
+	- js
+	- html
+- express 提供了返回静态资源的方法:  
+	1. 建立文件夹（默认 'public'）
+	2. 获取这个文件夹的路径
+	3. 将这个路径传入 express.static 函数
+	4. 使用 use 函数
+	`app.use(express.static(path.join(__dirname, 'public')));`
+
+- 使用：
+	- 将静态资源放入文件夹('public')
+	- index.html 作为默认首页
+	- 访问先去静态资源里面匹配，如果匹配到了，那么就直接返回，不会再继续向下匹配
+	
+5. 路由  （router）
+- 核心：3部分组成
+	- 路由方法
+	- 路由路径
+	- 路由句柄（句柄、中间件、处理函数）
+	- 请求端点： 路由方法 + 路由路径
+- 路由方法
+	- get：只处理 get 请求
+	- post：只处理 post 请求
+	- all：处理所有路由方法
+- 路由路径
+	- 文件路径匹配
+		- 字符串匹配
+- 路由句柄
+	- 一个请求端点可以有一个或者多个路由句柄
+	- 多个路由句柄我们主要使用两种形式
+		`app.get('/', func1, func2);`
+		`app.get('/', func1);`
+		`app.get('/', func2);`
+	- 路由句柄接受 3个参数
+		- req 携带者分析好了之后的请求信息
+		- res 处理响应信息
+		- next 可以在执行完了之后向后继续执行
+			- next('route') //跳过本路由端点继续向后执行
+6.在express中获取数据的方法：
+	1.查询(url)字符串获得数据（get方法）
+		res.query.username;
+	2.查询请求体获得数据（post方法）
+		res.body.username;
+	3.根据url字符串获得数据（get方法）这时你的输入是/xinwen/:name,这时用这种方法取得带有:name的name值
+		res.params.name
+7.如何设置cookie
+	res.cookie("key", "value", {(过期时间)expires:(时间)date})
+8.如何设置session
+	res.session.userId = doc(userId代表你要写的数据的名字，doc代表数据)
+7.题目：sessionStorage, localStorage, session, 和 cookie 的区别和优缺点
+在较高版本的浏览器中，js提供了sessionStorage和globalStorage。在HTML5中提供了localStorage来取代globalStorage。
+	html5中的Web Storage包括了两种存储方式：sessionStorage和localStorage。
+	sessionStorage用于本地存储一个会话（session）中的数据，这些数据只有在同一个会话中的页面才能访问并且当会话结束后数据也随之销毁。
+	因此sessionStorage不是一种持久化的本地存储，仅仅是会话级别的存储。
+	而localStorage用于持久化的本地存储，除非主动删除数据，否则数据是永远不会过期的。
+web storage和cookie的区别
+	Web Storage的概念和cookie相似，区别是它是为了更大容量存储设计的。Cookie的大小是受限的，并且每次你请求一个新的页面的时候Cookie都会被发送过去，这样无形中浪费了带宽，另外cookie还需要指定作用域，不可以跨域调用。
+	除此之外，Web Storage拥有setItem,getItem,removeItem,clear等方法，不像cookie需要前端开发者自己封装setCookie，getCookie。
+	但是cookie也是不可以或缺的：cookie的作用是与服务器进行交互，作为HTTP规范的一部分而存在 ，而Web Storage仅仅是为了在本地“存储”数据而生
+	浏览器的支持除了IE７及以下不支持外，其他标准浏览器都完全支持(ie及FF需在web服务器里运行)，值得一提的是IE总是办好事，例如IE7、IE6中的userData其实就是javascript本地存储的解决方案。通过简单的代码封装可以统一到所有的浏览器都支持web storage。
+	localStorage和sessionStorage都具有相同的操作方法，例如setItem、getItem和removeItem等
+cookie 和session 的区别：
+	 1、cookie数据存放在客户的浏览器上，session数据放在服务器上。
+	 2、cookie不是很安全，别人可以分析存放在本地的COOKIE并进行COOKIE欺骗
+		考虑到安全应当使用session。
+	 3、session会在一定时间内保存在服务器上。当访问增多，会比较占用你服务器的性能
+		考虑到减轻服务器性能方面，应当使用COOKIE。
+	 4、单个cookie保存的数据不能超过4K，很多浏览器都限制一个站点最多保存20个cookie。
+	 5、将登陆信息等重要信息存放为SESSION, 其他信息如果需要保留，可以考虑放在COOKIE中		
+8.pm2 
+	主要功能：管理多个node进程 看到 进程id 所使用的内存量
+	命令： 
+		pm2 start www	启动www这个服务器
+		pm2 stop id		停止具体id的这个服务器
+		pm2 restart id	重启具体id的这个服务器
+		pm2 list 		查看具体文件的列表
+9.ngrok	搭建本地服务器
+	9.1.容易出错的三处：
+		1. 自己的服务器一定要启动
+		2. https://www.ngrok.cc/user.html 在线状态
+		3. 再启动隧道
+	9.2具体步骤
+	9.2.1 开启本地服务器
+	1. 打开 webstorm 开始本地服务器，端口号设置为 3000 
+	9.2.2 开启 启动工具
+		1. 打开下载好的压缩包，找到： `Sunny-Ngrok启动工具.cmd` 
+			![打开启动工具](./图片资料/打开启动工具.png)
+		2. 运行 Sunny-Ngrok启动工具.cmd 输入 自己的 隧道id （我的是 389f9662fe8c0ae7）
+			![打开启动工具](./图片资料/打开工具输入自己的隧道id.png)
+		3. 隧道启动
+			![隧道启动](./图片资料/隧道启动.png)
+	9.2.3访问
+		1. 域名访问
+			![域名访问成功](./图片资料/域名访问成功.png)
+		2. 本地监听
+			![本地监听](./图片资料/本地监听.png)
+10.面试题总结
+	
+    10.1什么是错误优先的回调函数？
+        错误优先的回调函数用于传递错误和数据。第一个参数始终应该是一个错误对象， 用于检查程序是否发生了错误。其余的参数用于传递数据。例如：
+
+          fs.readFile(filePath, function(err, data) {  
+              if (err) {
+                  //handle the error
+              }
+              // use the data object
+          });
+
+    10.2什么是事件循环
+        Node采用的是单线程的处理机制（所有的I/O请求都采用非阻塞的工作方式），至少从Node.js开发者的角度是这样的。 而在底层，Node.js借助libuv来作为抽象封装层， 从而屏蔽不同操作系统的差异，Node可以借助libuv实现多线程。下图表示了Node和libuv的关系。Libuv库负责Node API的执行。它将不同的任务分配给不同的线程，形成一个事件循环， 以异步的方式将任务的执行结果返回给V8引擎。
+
+    10.3运算错误与程序员错误的区别
+        运算错误并不是bug，这是和系统相关的问题，例如请求超时或者硬件故障。而程序员错误就是所谓的bug。
+
+    10.4使用NPM有哪些好处？
+        通过NPM，你可以安装和管理项目的依赖，并且能够指明依赖项的具体版本号。 对于Node应用开发而言，你可以通过package.json文件来管理项目信息，配置脚本， 以及指明项目依赖的具体版本。
+
+    10.5collection中有类似{person: {clothes: {color: 'black'}}}这样的记录，想查询出该记录，查询条件该怎么写？
+        {"person.clothes.color": 'black'}
+
+    10.6如果在schema中指定了字段A的默认值，但数据库中并没有该字段，查询结果是什么？
+        查询结果为默认值
+
+    10.7nodejs的优缺点是什么？
+        Node.js优点：
+            采用事件驱动、异步编程，为网络服务而设计。
+            Node.js非阻塞模式的IO处理给Node.js带来在相对低系统资源耗用下的高性能与出众的负载能力。
+            Node.js轻量高效，可以认为是数据密集型实时应用系统的完美解决方案。
+            js语言适合前端工程师上手。
+            社区活跃发展速度快
+        Node.js缺点：
+            单进程，单线程，只支持单核CPU，不能充分的利用多核CPU服务器。
+            对程序员要求高一旦当前进程崩掉，那么整个web服务就崩掉了。
+            不适合做复杂很高的计算
+11.前后端交互过程：
+	1. 前后端程序员开会协商讨论接口设计
+		1. 接口包括：
+			1. 输入
+				1. method： post/get
+				2. url: 	/ajax_test/city
+				3. 参数： 	province_id=36
+				示例： get /ajax_test/city?province_id=36 
+			2. 输出
+				数据内容及其格式 城市的信息 json
+				示例：
+					{
+						city: [
+							{"id":"2","city":"北京市","parent":"1"},
+							{"id":"37","city":"石家庄市","parent":"36"}
+						]
+					}
+		2. 随着开发深入，修改接口文档
+		
+	2. 文档确定好后各自开发
+	3. 可能遇到的问题
+		1.前端：
+			1.测试后台发的数据对不对:
+				1.发没发 
+				2.数据是否正确
+			2.前端确保自己的代码正确
+			3.如果后端开发人员很忙，请自己建立服务器用假数据做测试
+		2.后端
+			1.自己测试的时候，浏览器访问，如果正确，则工作完成
+12.前后台交互出了问题?
+	1. 抛出异常
+		后台的问题(webstorm): 调试后台js
+		前台的问题(浏览器): 调用前台js
+	2. 没有效果
+		查看network
+		debug调试
+
+
+
+
+
+
+
+	
+		
+	
+		
+			

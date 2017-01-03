@@ -1,0 +1,187 @@
+1.jQuery的两把利器
+	1. jQuery核心函数 : $ / jQuery
+	2. jQuery核心对象 : 执行$()返回的对象就是它	
+	$就是一个函数，和jQuery等同
+	console.log($===window.$); //true  $是一个全局函数
+	$();这个对象就是jQuery对象
+2.jQuery的特点
+		- HTML元素选取
+		- HTML元素操作
+		- CSS操作
+		- HTML事件处理
+		- JS动画效果
+		- 链式调用
+		- 浏览器兼容
+		- Ajax封装
+		- 易扩展插件
+3.jQuery核心函数
+	1. 作为一般函数调用: $(params)
+			1). 参数为函数 : 当DOM加载完成后，执行其中的函数
+			2). 参数为选择器(selector)字符串: 查找所有匹配的标签, 并将它们封装成jQuery对象
+		 		 selector: 与css选择器类似, 能高效的找到目标标签
+		 	3). 参数为DOM对象: 将dom对象封装成jQuery对象
+		 		dom对象只有dom对象的属性/方法, 而jQuery对象拥有它特有的方法(非常强大)
+			4). 参数为html标签字符串 (用得少): 创建标签对象并封装成jQuery对象
+		 2. 作为对象使用: $.xxx()	//不会做就查文档
+			 $.each() : 隐式遍历数组
+			 $.trim() : 去除两端的空格
+			 $.type(obj): 得到数据的类型
+			 $.isArray(obj): 判断是否是数组
+			 $.isFunction(obj): 判断是否是函数
+			 $.parseJSON(json) : 解析json字符串转换为js对象/数组
+4.回调函数
+	 1. 你定义的
+	 2. 你没有调用它
+	 3. 它最终执行了
+5.jQuery对象
+	调用$()返回的就是jQuery对象
+	jQuery 对象是一个包含所有匹配的任意多个 dom 元素的伪数组对象
+			 基本行为
+				 length : 内部包含的dom元素对象的个数
+				 size() : 内部包含的dom元素对象的个数
+				 each(function(index, domEle){this就是domeEle}) : 遍历内部包含的dom元素数组中的所有元素对象
+				 index() : 返回当前dom元素在整个兄弟元素中的下标
+6.jQuery选择器
+	6.1基本选择器
+		 是什么?  有特定格式的字符串
+				 作用: 用来查找特定页面元素
+
+				 #id : id选择器
+				 element : 元素选择器
+				 .class : 属性选择器
+				 * : 任意标签
+				 selector1,selector2,selectorN : 取多个选择器的并集(组合选择器)
+				 selector1selector2selectorN : 取多个选择器的交集(相交选择器)
+	6.2.层次选择器
+			selector1 selector2 ---> 后代(后代元素)
+				在给定的祖先元素下匹配所有的后代元素
+			 parent	>	child
+				在给定的父元素下匹配所有的子元素
+			 prev	+	next
+				匹配所有紧接在 prev 元素后的 next 元素
+			 prev	~	siblings
+				匹配 prev 元素之后的所有 siblings 元素     //siblings 兄弟姐妹
+	6.3过滤选择器
+			基本的 : :first, :last, :not(selector), :lt, :gt
+				- 可见性 : :hidden, :visible
+				- 内容 : :contains(text)
+				- 属性 : [attrName], [attrName=value]
+	6.4表单选择器
+			- 表单项:  :input(选中所有的input,selector,textarea,button), :checkbox, :text
+			- 表单对象属性
+				- :checked
+				- :selected
+				- :disabled
+所有运用jQuery属性选择的对象都是jQuery对象
+7.属性
+		操作任意属性
+			 attr()				读取属性/设置属性		例子$("p").attr("title")/$("p").attr("title","atguigu");
+			 removeAttr()		移除所有的属性
+			 prop()				读取属性/设置属性	和attr()的区别；attr主要设置正常属性，prop()主要设置值为ture/false的属性，如checked,radio,disabled...		
+		 操作class属性
+			 addClass()			为元素添加class类		例子$("div").addClass("box1");
+			 removeClass()		删除元素中的class类		例子$("div").removeClass("box1");
+		 操作HTML代码/文本/值
+			 html()				读取标签体文本/设置标签体文本	读取时不需要在括号里写值，设置时在括号里写值
+			 val()				读取value值/设置value值
+8.css
+		.css(“color”)					读取css值
+		.css("color","red")				设置css值
+		.css({color:"#f00",background:"yellow",width:"300px",height:30});		设置多个css值
+	- jQuery对象的使用
+	
+	- css
+		- css(styleName, styleValue) : 读/写入内联样式
+		- offset() : 读/写相对于视口的左上角的坐标 offset.left/top
+		- position() : 读取相对于父元素的位置
+		- scrollTop(value) : 读取/设置滚动条的y坐标
+		- width() : 内容宽度  width
+		- innerWidth() : 内容宽度+内边距  width + 2*padding
+		- outWidth() : 内容宽度+内边距+边框  width + 2*padding+2*border
+		- outWidth(true) : 内容宽度+内边距+边框+外边距  width + 2*padding+2*border+2*margin
+	- 文档: 对dom元素进行增删改的操作
+			- append() : 内部插入(最后)
+			- appendTo() : 内部插入(最后)
+			- prepend() : 内部插入(前部)
+			- prependTo() : 内部插入(前部)
+			- before() : 外部插入(前面)
+			- after() : 外部插入(后面)
+			- replaceWith(content) : 替换
+			- replaceAll(selector) : 替换
+			- remove() : 删除自己
+			- empty() : 删除标签体
+	过滤
+		在jQuery对象中的元素对象数组中过滤出一部分元素来
+				 first()
+				 last()
+				 eq(index|-index)
+				 filter(selector)
+				 not(selector)
+				 has(selector)
+	筛选			 
+		在已经匹配出的元素集合中根据选择器查找孩子/父母/兄弟标签
+			 children(): 子标签中找
+			 find() : 后代标签中找
+			 parent() : 父标签
+			 prevAll() : 前面所有的兄弟标签
+			 nextAll() : 后面所有的兄弟标签
+			 siblings() : 前后所有的兄弟标签
+9.易扩展插件
+			 扩展jQuery的工具方法
+			$.extend(object)
+		 扩展jQuery对象的方法
+			 $.fn.extend(object)
+10.$工具方法
+	$.each(): 遍历数组或对象中的数据
+			 数组:
+			 	var arr = [123, 'hello', true];
+			 对象:
+				 var person = {
+					 name : 'tom',
+					 age : 12
+				 };
+         $.trim(): 去除字符串两边的空格
+         $.type(obj): 得到数据的类型
+         $.isArray(obj): 判断是否是数组
+         $.isFunction(obj): 判断是否是函数
+         $.parseJSON(json) : 解析json字符串转换为js对象/数组
+         	var json = '{"username":"jack", "age" : 12}';
+11offset和position
+		 获取/设置标签的位置数据
+		offset()
+			相对页面左上角的坐标
+		position()
+			相对于父元素左上角的坐标
+12.元素的尺寸
+		内容尺寸
+				 height()   height
+				 width()  width
+		 内部尺寸
+			 innerHeight()    height+padding
+			 innerWidth()   width+padding
+		 外部尺寸
+			 outerHeight(false/true) height+padding+border   如果是true, 加上margin
+			 outerWidth(false/true)  width+padding+border 如果是true, 加上margin
+13.事件
+	 on(eventName, funcion(){})
+		通用的绑定事件监听
+	 eventName(function(){})
+		绑定某个具体的事件监听
+	 off(eventName)
+		解绑事件监听
+	 回调函数中的event:
+		 jQuery已经包装好, 所有浏览器都有
+	 事件的坐标
+			 event.clientX, event.clientY  相对于视口的左上角
+			 event.pageX, event.pageY  相对于页面的左上角
+			 event.offsetX, event.offsetY 相对于offsetParent元素左上角
+	 相关处理
+			 阻止事件冒泡 : event.stopPropagation();
+			 阻止默认行为 : event.preventDefault();
+	jQuery的事件委托API
+			设置事件委托: $(parentSelector).delegate(childrenSelector, eventName, callback)
+			移除事件委托: $(parentSelector).undelegate(eventName);
+	事件的切换
+			hover(	function(){} 	,function(){}	),hover 实际上运用的是onmouseenter 	和onmouseleave
+14.动画
+		

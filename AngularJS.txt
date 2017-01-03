@@ -1,0 +1,413 @@
+1.angular入门
+	作用：构建单页面WEB网站或web App(主要运用angular route在主页面做路由，在分页面写模板（template）)
+	优点：1.解耦应用逻辑，数据模型和视图
+		  2.完善的页面指令
+		  3.定制表单验证 
+		  4.AJax封装
+	ng-app(指令) 有两个作用: 
+		1.告诉angular管理当前标签所包含的整个区域
+		2.创建$rootScope作用域对象
+	ng-model=username : 将当前输入框的值与username关联(属性名 uesrname:属性值 你输入的具体值), 并作为根作用域对象($rootScope)的属性
+	{{}} (表达式) : 显示数据,从作用域对象的指定属性名上取
+	关键：ng-model的双向数据绑定特性
+	1.当页面输入框的数据变化时，angular会更新到域对象的对应属性
+	2.当域对象上的属性数据发生变化时，angular会更新其对应的页面显示
+1.2angular和jquery的比较
+	jquery更多的是简化dom操作。是JS的函数类库
+	angular的主体不再是dom操作，而是页面中的动态数据管理，它是JS的框架模型
+2.四个重要概念
+	2.1双向数据绑定
+		1. 数据绑定: 数据从一个地方A转移(传递)到另一个地方B, 而且这个操作由框架来完成
+		   视图(View): 也就是我们的页面(主要是Andular指令和表达式)
+		   模型(Model) : 作用域对象(当前为$rootScope), 它可以包含一些属性或方法
+		   当改变View中的数据, Model对象的对应属性也会随之改变:  ng-model指令  数据从View==>Model		
+		   当Model域对象的属性发生改变时, 页面对应数据随之更新:  {{}}表达式  数据从Model==>View
+		2. 双向数据绑定: 数据可以从View流向Model(ng-init/ng-model), 也可以从Model流向View(ng-model/{{}})
+		   ng-model是双向数据绑定, 而{{}}是单向数据绑定
+		3. 指令: Angular对html的扩展, 包括: 属性 ng-app, 标签 <ng-view></ng-view>(在模板当中用，标签名可以随意起),样式 ng-class , 注释
+		4. 表达式: {{}}, 用来显示数据
+	2.2依赖注入
+		依赖注入: 依赖对象被自动注入进来
+			指定形参的回调函数必定用到了依赖注入
+		1. 什么是依赖对象?
+		 完成特定功能的函数需要某个对象才能实现, 这个对象就是依赖对象
+		2. 如何引入依赖对象?
+		 方式一: 内部自己创建 : 不动态	（不用）
+		 方式二: 全局变量 : 污染全局命名空间	（不用）
+		 方式三: 形参引入依赖 : 依赖注入使用的方式	（使用这种）
+		3. 依赖注入
+		 定义函数时, 使用形参声明依赖对象变量, 在函数体中使用依赖对象(我们实现)
+		 函数调用时, 自动将创建好的依赖对象动态传入(框架实现)
+		 例子: 事件监听就使用了依赖注入, event就是依赖对象(event可以是任意名称)
+	Angular的依赖注入
+	  形参必须是特定的名称($scope), 否则Angular无法注入并且抛异常
+	  可以通过定义数组，在数组前传指定的参数名，这样在函数定义形参时就不需要特定的名称了。例：angular.controller('mycontroller', ['$scope', '$rootscope'], function($scope,$rootscope){
+	  }
+	2.3MVC模式
+		通用：MVC模式最开始是服务器端的模型，即M：模型，V：视图，C：控制器 
+			M：模型	操作数据的业务模型，存储数据的实体模型
+			V：视图	显示数据，响应用户操作，与用户进行交互
+			C：控制器 操作模型数据, 更新视图，View与Model之间的桥梁
+		在Angular中：View视图 	1.html/css/directive/expression/filter 	2.显示Model的数据 	3.将数据同步到Model 	4.与用户交互
+					 Model模型 	1.$scope 	2.储存数据的容器 	3.提供操作数据的方法
+					 Controller控制器		1.初始化Model数据 	2.为Model添加行为方法,在angularz中起的作用很小
+	2.4MVVM模式
+		AngularJS实际上采用的是MVVM模式
+		Model/模型：1.scope中的各个数据对象		2.数据模型
+		View/视图：1.html/css/directive/expression/filter	2.显示VM中的数据	3.与用户交互
+		viewModel/视图模型：	1.scope对象	2.View和Model的交互和协作	3.给View提供显示的数据	4.提供了View中Command事件(例如点击，失去焦点)操作Model的途径
+3.四个重要对象
+	3.1. 作用域	scope
+	 是一个js实例对象
+	 这个对象的属性、方法， 页面都可以直接引用、操作
+	 ng-app指令： 内部创建一个根作用域（$rootScope）, 是所有其它作用域的父对象
+	3.2. 控制器	controller
+	 也是一个对象，是View与Model之间的桥梁
+	 ng-controller : 指定控制器构造函数, Angular会自动new此函数创建控制器对象
+	 同时Angular还有创建一个新的域对象$scope, 它是$rootScope的子对象
+	 在控制器函数中声明$scope形参, Angular会自动将$scope传入
+	 每定义一个ng-controller指令， 内部就会创建一个新的作用域对象（$scope）, 并输入构造函数中
+	3.3 模块 module
+	 也是一个对象
+	 创建模块对象： angular.module('模块名', [依赖的模块])
+	 通过模块添加控制器：
+	     module.controller('MyController', ['$scope', '$rootScope'
+	        funnction($scope, $rootScope){//操作$scope的语句}])
+	 angular的整体设计也是多模块的
+		 核心模块： angular.js
+		 扩展模块： angular-router.js, angular-messages.js, angular-animate.js
+		 module对象
+		 由angular.module()创建
+		 方法
+	     controller() : 定义控制器
+		 factory() : 定义服务对象
+		 service() : 定义服务对象
+		 filter() : 定义过滤器
+		 directive() : 定义指令
+		 config() : 指定做一些配置的回调函数
+	3.4服务	service
+	 是什么？ 具有特定功能的对象（object对象、函数，数组，基本类型）
+	 内置服务
+		 都以$开头
+		 引入内置服务： 声明式依赖注入（定义形参）, 你不使用它就存在了
+		 常用的几个：
+			 $rootScope
+			 $scope
+			 $timeout 
+			 $interval
+			 脏数据检查: 
+			     当angular定义的函数执行完后, 会对scope内的属性进行检查, 如果发现有改变更新界面
+			     在非angular定义的回调函数执行完后, 不会进行脏数据检查 --->即使更新了scope页面不会同步更新
+		 页面如何能自动更新的？
+			 在内置的一些函数执行完后， angular会进行脏数据检查的操作
+			 controller, $timeout()中的回调函数,  $interval()中的回调函数
+			 如果我们在setTimeout()的回调函数中更新scope，是不会进行脏数据检查的，页面不可能更新 
+	 自定义服务
+		 使用module对象来定义服务，命名时不以$开头
+		 定义的方法：
+			 factory('fService', function(){return 服务}) : 可以定义任意类型的服务
+			 service('sService', function(){}) ： 只能定义object类型对象
+		 factory()
+			factory('服务名', function(){
+				return 服务对象;  //可以是任意类型
+			})
+		 如何引入： 声明式依赖注入
+4.三个页面语法
+	4.1 表达式
+		 语法：{{js表达式}}
+		 作用：从作用域对象中读取对应的属性数据来显示数据
+		 不支持if/for/while
+		 支持三目表达式
+	比较Angular表达与JS的表达式
+		1. Angular表达式写法与JS的表达式类同
+		2. 与JS表达式不同，AngularJS 表达式可以写在HTML中。
+		3. 与JS表达式不同，AngularJS 表达式不支持条件判断，循环及异常。
+		4. 与JS表达式不同，AngularJS 表达式支持过滤器
+	4.2 指令
+		 什么指令 ： 自定义标签属性/标签
+		 常用的内置指令：
+			 ng-app: 指定模块名，angular管理的区域
+			 ng-model： 双向绑定，输入相关标签
+			 ng-init： 初始化数据
+			 ng-click： 调用作用域对象的方法（点击时）
+			  $event: 代表事件的对象
+			 ng-controller: 指定控制器构造函数名，内部会自动创建一个新的子作用域（外部的）
+			 ng-bind： 解决使用{{}}显示数据闪屏（在很短时间内显示{{}}）
+			 ng-repeat： 遍历数组显示数据， 数组有几个元素就会产生几个新的作用域
+				 $index, $first, $last, $middle, $odd, $even
+			 ng-show: 布尔类型， 如果为true才显示
+			 ng-hide: 布尔类型， 如果为true就隐藏
+			
+			 ng-class: 动态引用定义的样式  {aClass:true, bClass:false}
+			 ng-style: 动态引用通过js指定的样式对象   {color:'red', background:'blue'}
+			 ng-click: 点击监听, 值为函数调用, 可以传$event
+			 ng-mouseenter: 鼠标移入监听, 值为函数调用, 可以传$event
+			 ng-mouseleave: 鼠标移出监听, 值为函数调用, 可以传$event
+			 ...
+	4.3 过滤器
+		 作用: 在显示数据时可以对数据进行格式化或过滤
+			 单个--->格式化（将别的类型的数据转换为特定格式的字符串）
+			 多个----》格式化/过滤
+			 不会真正改变被操作数据
+		 语法：表达式中: {{expression | 过滤器}}
+				ng-bind='expression | 过滤器'
+				JS中: 使用$filter内置服务函数
+				
+		 常用内置：
+			 currency 货币格式化(文本)
+			 number数值格式化(文本)
+			 date 将日期对象格式化(文本)
+			 json: 将js对象格式化为json(文本)
+			 lowercase : 将字符串格式化为全小写(文本)
+			 uppercase : 将字符串格式化全大写(文本)
+
+			 limitTo 从一个数组或字符串中过滤出一个新的数组或字符串
+				 limitTo : 3  limitTo : -3
+			 orderBy : 根据指定作用域属性对数组进行排序
+				 {{[2,1,4,3] | orderBy}}  升序
+				 {{[2,1,4,3] | orderBy：‘-’}}  降序
+				 {{[{id:2,price:3}, {id:1, price:4}] | orderBy:'id'}  id升序
+				 {{[{id:2,price:3}, {id:1, price:4}] | orderBy:'-price'} price降序
+			 filter : 从数组中过滤返回一个新数组
+				 {{[{id:22,price:35}, {id:23, price:45}] | filter:{id:'3'}} //根据id过滤
+				 {{[{id:22,price:35}, {id:23, price:45}] | filter:{$:'3'}} //根据所有字段过滤
+		 自定义过滤器
+			 内置过滤器有限， 有时并不能满足页面显示数据的需求
+			 语法：
+				module.filter('myLimitTo'， function(){  //filterFactory
+					return function(value, startIndex, endIndex){
+						对vlaue进行过滤处理， 并return 处理的结果
+						//不要修改value本身
+					}
+				});
+5.三个对象的使用详解
+	5.1 angular对象
+		 由angular.js提供的全局变量
+		 方法:
+		   module(name, []) : 创建模型对象
+		 bootstrap(document, [name]) : 编码启动angular, 代替ng-app
+		 element(dom元素对象) : 将dom对象/html标签包装为jQuery对象
+		 forEach() : 遍历数组和元素集合伪数组
+		 toJson()和fromJson() : js对象与Json字符串相互转换
+		 isArray(),isObject(),isFunction() : 类型判断
+		 lowercase()和uppercase() : 大小写转换
+	
+	5.3 $scope对象
+		 $apply(): 强制脏数据检查
+		   当scope中的数据发生了改变, angular会将数据同步显示到页面, 这一操作称为"脏数据检查"
+		 angular在它的方法执行完后, 都会进行脏数据检查,
+		 在原生JS函数中改变作用域数据, angular是不会进行脏数据检查的
+		 使用$scope的$apply函数可以解决此问题
+			$scope.$apply(function(){
+				//在这里更新scope数据, angular会同步更新其页面数据，只要把要更新的操作写在这个函数中就可以了，不需要别的
+			});
+		 $apply()的本质是调用$digest()去进行脏数据检查更新页面的
+				$scope.$digest()
+		 $digest()虽然也能实现页面更新, 但建议使用$apply()
+		 $watch(): 监视scope中某个属性的变化 
+		   angular是双向数据绑定的, Scope中的属性数据发生了改变, 会自动更新页面中对应的数据
+		 但有时, 我们想监视数据的变化情况, 来实现特定的功能
+		 Angular提供了$watch()来实现
+				 var unWatch = $scope.$watch('propertyName', function(newValue, oldValue){}, deepWatch)
+				 参数一: 指定监视属性的属性名
+				 参数二: 发现数据发生改变时的回调函数
+				 参数三: 是否深度监视, 默认是false, 代表只是监视属性本身, 而不监视其内部数据
+				 返回值: 用于取消监视的函数, 调用unWatch()取消监视
+6.三个最常用的angular模块
+	6.1 angular-animate
+	   Angular动画是通过操作css transition动画样式实现动画效果的
+	   使用
+		 引入angular-animate.js
+		 引入模块依赖: angular.module('myApp', ['ngAnimate'])
+		 定义显示状态和隐藏状态class
+		  ```
+			/显示状态下的样式/
+			div {
+			  transition: all linear 0.5s; /过渡动画/
+			}
+		
+			/隐藏状态下的样式/
+			.ng-hide {
+			  
+			}
+		  ```
+		 通过ng-show/ng-hide来控制元素的显示与隐藏
+		  ```
+		  <div ng-hide="myCheck"></div>
+		  ```
+	6.2 angular-messages
+	   angular进行表单验证的扩展库(插件)
+	   指定验证规则的指令
+		 ng-required="true"
+		 ng-minlength="4"
+		 ng-maxlength="8"
+		 ng-pattern="/^[a-zA-Z]/"
+		 例子如下：
+			<div ng-show="myForm.username.$dirty&&myForm.username.$invalid" 		//$invalid代表数据不合法
+									ng-messages="myForm.username.$error"			//$error是angular已经封装好的对象，可以直接使用
+						 class="alert alert-danger help-block">
+
+						<span ng-message="required" ng-bind="'必填项'"></span>
+						<span ng-message="minlength" ng-bind="'字符太短小于4'"></span>
+						<span ng-message="pattern" ng-bind="'开头必须是字母'"></span>
+			</div>
+	   显示提示信息的指令
+		 ng-messages	读取表单项中的$error对象		ng-messages="myForm.username.$error"
+		 ng-message		读取$error对象中验证名称属性, 如果为true才会显示当前标签	ng-message="minlength"
+		 ng-show		控制包含提示信息的标签是否显示	ng-show="myForm.username.$dirty&&myForm.username.$invalid"
+		 ng-bind		指定提示信息文本字符串			ng-bind="'字符太短小于4'"
+		 ng-class		避免出现红色提示区域闪烁的情况	ng-class="'alert alert-danger help-block'"
+	   注意:
+		 form和input都必须有name属性
+		 <input>必须有ng-model
+	6.3 angular-route
+	   对单页应用SPA来讲，路由用来管理用户在使用过程中看到的多个界面
+	   使用
+		 引入angular-route.js
+		 引入模块依赖: angular.module('myApp', ['ngRoute'])
+		 定义module对象(app.js)
+		  ```
+		  window.module = angular.module('myApp', ['ngRoute'])
+		  ```
+		 定义路由template页面
+		   list.html
+			```
+			<ul>
+			  <li ng-repeat="id in ids">
+				<a href="#/detail/{{id}}">ID{{id}}</a>
+			  </li>
+			</ul>
+			```
+		   detail.html
+			```
+			<p>Route {{id}}: detail.html</p>
+			``` 
+		 定义路由controller
+		   ListCtrl.js
+			```
+			window.module.controller('ListController', ['$scope',
+				function($scope) {
+				  $scope.ids = [1, 2, 3, 4, 5, 6]
+				}])
+			```
+		   DetailCtrl.js
+			```
+			window.module.controller('DetailController', ['$scope', '$routeParams',
+				function($scope, $routeParams) {
+				  $scope.id = $routeParams.id
+				}])
+			```
+		 注册路由(appRoute.js)
+		  ```
+		  window.module.config(['$routeProvider', function($routeProvider) {
+			  $routeProvider
+				.when('/list', {
+				  templateUrl: 'src/templates/list.html', //从index.html查找
+				  controller: 'ListController'
+				})
+				.when('/detail/:id', {
+				  templateUrl: 'src/templates/detail.html',
+				  controller: 'DetailController'
+				})
+				.otherwise('/list')
+			}])  
+		  ```
+		 主js启动应用(main.js)
+		  ```
+		  angular.angular.bootstrap(document, ['myApp'])
+		  ```
+		 主页(test.html)
+		```
+		<div>
+		  <h1>Route Demo</h1>
+		  <ng-view></ng-view>
+		</div>
+		
+		<script type="text/javascript" src="../../../../js/angular-1.5.5/angular.js"></script>
+		<script type="text/javascript" src="../../../../js/angular-1.5.5/angular-route.js"></script>
+		
+		<script type="text/javascript" src="src/app/app.js"></script>
+		<script type="text/javascript" src="src/controllers/ListCtrl.js"></script>
+		<script type="text/javascript" src="src/controllers/DetailCtrl.js"></script>
+		<script type="text/javascript" src="src/route/appRoute.js"></script>
+		<script type="text/javascript" src="src/main.js"></script>
+		```
+7.ajax封装
+	7.1 angular通过$http服务来提交ajax请求
+	7.2 GET请求
+	  ```
+	  //方式一
+	  $http({
+		  method: "GET",
+		  url: "",
+		params: myParams
+	  })
+	  .success(function (data, status, headers, config) {
+		 
+	  })
+	  .error(function (data, status, headers, config) {
+		  
+	  });
+	  
+	  //方式二
+	  $http.get(url)
+	  .success(function (data, status, headers, config) {
+		 
+	  })
+	  .error(function (data, status, headers, config) {
+		  
+	  });
+	  ```
+	7.3POST请求
+		  ```
+		  //方式一:
+		  $http({
+			  method: "POST",
+			  url: "",
+			data: myData,
+		  })
+		  .success(function (data, status, headers, config) {
+			 
+		  })
+		  .error(function (data, status, headers, config) {
+			  
+		  });
+		  
+		  //方式二
+		  $http.post(url, data)
+		  .success(function (data, status, headers, config) {
+			 
+		  })
+		  .error(function (data, status, headers, config) {
+			  
+		  });
+		  ```
+	7.4 JSONP跨域请求
+		/ angular中的处理Jsonp的跨域请求是在url上写上callback = JSON_CALLBACK/
+		$http.jsonp('http://localhost:3000/node_jsonp?callback=JSON_CALLBACK&username=Tom2&passwod=123abc2')
+				.success(function (data) {
+						$scope.persons = data;
+				})
+				.error(function (data) {
+					alert(data);
+				});
+8.angular对promise的封装
+		基本用法：用封装的promise即$q,来发送ajax请求
+		function getEmps2() {
+          let defer = $q.defer();
+
+          $http({
+            method: 'GET',
+            url: '/angular_node/get',
+            params: {username:'Tom', age:12}
+          })
+              .success(function (emps) {
+                defer.resolve(emps);
+              })
+              .error(function () {
+                defer.reject();
+              });
+          return defer.promise;
+        }
+
+
